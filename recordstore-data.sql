@@ -2,7 +2,7 @@ DROP DATABASE IF EXISTS recordstore;
 CREATE DATABASE recordstore;
 USE recordstore;
 
-CREATE TABLE Albums (
+CREATE TABLE Album (
 Disc_ID 	INT NOT NULL AUTO_INCREMENT,
 Artist 		VARCHAR(30),
 Album_Name 	VARCHAR(50),
@@ -12,7 +12,7 @@ PRIMARY KEY(Disc_ID)
 );
 
 -- Insert test values into table
-INSERT INTO Albums (Artist, Album_Name, ReleaseDate, Genre)
+INSERT INTO Album (Artist, Album_Name, ReleaseDate, Genre)
 VALUES
     ('Artist1', 'AlbumName1', '2023-01-01', 'Genre1'),
     ('Artist2', 'AlbumName2', '2023-02-15', 'Genre2'),
