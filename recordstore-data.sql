@@ -172,6 +172,6 @@ VALUES
     
     CREATE TABLE manager(
 		manager_id INT NOT NULL PRIMARY KEY,
-        FOREIGN KEY(manger_id) 
+        FOREIGN KEY(manager_id) 
 			REFERENCES employee(employee_id)
     );
