@@ -8,31 +8,46 @@ artist 		VARCHAR(30),
 album_name 	VARCHAR(50),
 release_date DATE,
 genre 		VARCHAR(30),
-PRIMARY KEY(Disc_ID)
+PRIMARY KEY(disc_ID)
 );
 
 -- Insert test values into album table
 INSERT INTO album (artist, album_name, release_date, genre)
 VALUES
-    ('Artist1', 'AlbumName1', '2023-01-01', 'Genre1'),
-    ('Artist2', 'AlbumName2', '2023-02-15', 'Genre2'),
-    ('Artist3', 'AlbumName3', '2023-03-20', 'Genre3'),
-    ('Artist4', 'AlbumName4', '2023-04-05', 'Genre4'),
-    ('Artist5', 'AlbumName5', '2023-05-10', 'Genre5'),
-    ('Artist6', 'AlbumName6', '2023-06-18', 'Genre6'),
-    ('Artist7', 'AlbumName7', '2023-07-22', 'Genre7'),
-    ('Artist8', 'AlbumName8', '2023-08-30', 'Genre8'),
-    ('Artist9', 'AlbumName9', '2023-09-07', 'Genre9'),
-    ('Artist10', 'AlbumName10', '2023-10-12', 'Genre10');
+  ('Ed Sheeran', 'Divide', '2017-03-03', 'Pop'),
+  ('Queen', 'A Night at the Opera', '1975-11-21', 'Rock'),
+  ('John Lennon', 'Imagine', '1971-09-09', 'Rock'),
+  ('Eagles', 'Hotel California', '1976-12-08', 'Rock'),
+  ('The Weeknd', 'After Hours', '2020-03-20', 'R&B'),
+  ('The Beatles', 'Help!', '1965-08-06', 'Rock'),
+  ('Michael Jackson', 'Thriller', '1982-11-30', 'Pop'),
+  ('Led Zeppelin', 'Led Zeppelin IV', '1971-11-08', 'Rock'),
+  ('Adele', '21', '2011-01-19', 'Pop'),
+  ('Jimi Hendrix', 'Are You Experienced', '1967-05-12', 'Rock'),
+  ('Guns N\' Roses', 'Appetite for Destruction', '1987-07-21', 'Rock'),
+  ('Nirvana', 'Nevermind', '1991-09-24', 'Grunge'),
+  ('Earth, Wind & Fire', 'I Am', '1979-06-09', 'Funk'),
+  ('The Police', 'Synchronicity', '1983-06-17', 'Rock'),
+  ('John Legend', 'Love in the Future', '2013-08-30', 'R&B'),
+  ('Oasis', '(What\'s the Story) Morning Glory?', '1995-10-02', 'Rock'),
+  ('The Beatles', 'Let It Be', '1970-05-08', 'Rock'),
+  ('Imagine Dragons', 'Night Visions', '2012-09-04', 'Alternative'),
+  ('The Beatles', 'Magical Mystery Tour', '1967-11-27', 'Rock'),
+  ('The White Stripes', 'Elephant', '2003-04-01', 'Rock'),
+  ('ABBA', 'Arrival', '1976-10-11', 'Pop'),
+  ('Pink Floyd', 'Wish You Were Here', '1975-09-12', 'Rock'),
+  ('Simon & Garfunkel', 'Parsley, Sage, Rosemary and Thyme', '1966-10-24', 'Folk');
+  
 
--- TODO: Foreign keys in song table reference to album table?
 CREATE TABLE song(
 song_name 		VARCHAR(30),
 artist_name 	VARCHAR(30),
 album_name 		VARCHAR(50),
 release_date 	DATE,
-rating 			VARCHAR(30)
-
+rating 			VARCHAR(30),
+FOREIGN KEY(artist_name, album_name) 
+	REFERENCES album(artist, album_name)
+	ON UPDATE CASCADE
 );
 
 -- Insert values into song table
@@ -143,7 +158,7 @@ VALUES
 		customer_id INT NOT NULL AUTO_INCREMENT,
         fname 		VARCHAR(20),
         lname		VARCHAR(20),
-		phone_num	CHAR(12), -- format xxx-xxx-xxxx for insert
+		phone_num	CHAR(12), -- format xx-xxx-xxxx for insert
         PRIMARY KEY(customer_id)
     );
     
@@ -151,21 +166,30 @@ VALUES
     sale_id 	INT NOT NULL AUTO_INCREMENT,
     customer_id INT NOT NULL,
     sale_date 	DATE,
-    PRIMARY KEY(sale_id)
+    disc_ID		INT,
+    PRIMARY KEY(sale_id),
+	FOREIGN KEY(customer_id)
+		REFERENCES customer(customer_id),
+	FOREIGN KEY (disc_ID)
+		REFERENCES album(disc_ID)
     );
     
     CREATE TABLE pre_order(
     pre_order_id 	INT NOT NULL,
+    sale_id 		INT,
 	customer_id 	INT	NOT NULL,
     pickup_date 	DATE, 
     album_id		INT,
-    FOREIGN KEY(pre_order_id) 
-		REFERENCES sale(sale_id),
+    FOREIGN KEY(sale_id) 
+		REFERENCES sale(sale_id)
+        ON UPDATE CASCADE,
 	FOREIGN KEY(customer_id)
-		REFERENCES customer(customer_id),
+		REFERENCES customer(customer_id)
+        ON UPDATE CASCADE,
 	PRIMARY KEY(pre_order_id)
 	);
     
+    -- employee and manager table not yet in use
     CREATE TABLE employee(
 		employee_id 	INT NOT NULL PRIMARY KEY
     );
@@ -175,3 +199,5 @@ VALUES
         FOREIGN KEY(manager_id) 
 			REFERENCES employee(employee_id)
     );
+    
+    
