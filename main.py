@@ -14,6 +14,7 @@ cursor = connection.cursor()
 class CDDBQueryApp:
     def __init__(self, root):
 
+        # Set user type to determine which functions are available
         self.user_type = None
 
         # Setting the title and window size
@@ -37,20 +38,26 @@ class CDDBQueryApp:
         self.init_home_page()
     
     def init_home_page(self):
+
+        #Initiate home page
         home_title = tk.Label(self.home_frame, text="Welcome to the CD Database!", background="lightgray", font=("Arial", 16))
         home_title.pack(pady=20)
 
+        #Allows for only search functionality
         customer_button = tk.Button(self.home_frame, text="Customer Functions", command=lambda: self.set_user_type('customer'), bg="lightgray", height = 4, width = 20, font=("Arial", 14))
         customer_button.pack(pady=10)
 
+        #Allows for all functionality
         employee_button = tk.Button(self.home_frame, text="Employee Functions", command=lambda: self.set_user_type('employee'), bg="lightgray", height = 4, width = 20, font=("Arial", 14))
         employee_button.pack(pady=10)
 
     def show_home_page(self):
+
         # Hide other frames and show the home frame
         self.search_frame.pack_forget()
         self.add_frame.pack_forget()
         self.home_frame.pack(fill="both", expand=True)
+
         # If there's an "Add a Song" button, hide it
         if hasattr(self, 'add_song_button'):
             self.add_song_button.pack_forget()
@@ -82,7 +89,8 @@ class CDDBQueryApp:
         # Button to navigate back to the Search page or Home page
         tk.Button(self.add_frame, text="Back to Search", command=self.show_search_page, bg="lightgray").pack(pady=10)
         tk.Button(self.add_frame, text="Back to Home", command=self.show_home_page, bg="lightgray").pack(pady=10)
-        
+    
+    #Creating input fields
     def init_input_fields(self, parent, button_text, button_command, entries_dict):
         subtitle = tk.Label(parent, text="If adding a song, fill out all fields. If searching for a song, just fill out the song name.", background="lightgray", font=("Arial", 12))
         subtitle.pack(pady=10)
@@ -101,7 +109,8 @@ class CDDBQueryApp:
 
         # Button at the bottom of the input fields
         tk.Button(parent, text=button_text, command=button_command, bg="lightgray").pack(pady=20)
-        
+
+    #Search db for song logic  
     def search_db(self):
         # Get the search term for song name
         song_name = self.search_entries["Song Name"].get()
@@ -136,7 +145,8 @@ class CDDBQueryApp:
         result = cursor.fetchall()
         for row in result:
             print(row)
-        
+    
+    #Add to db logic
     def add_to_db(self):
         song_name = self.add_entries["Song Name"].get()
         artist_name = self.add_entries["Artist Name"].get()
@@ -164,7 +174,8 @@ class CDDBQueryApp:
 
         cursor.execute(querySong, (song_name, artist_name, album_name, release_date, rating))
         connection.commit()
-        
+
+    #Display add page 
     def show_add_page(self):
         for entry in self.search_entries.values():
             entry.delete(0, tk.END)
@@ -173,7 +184,8 @@ class CDDBQueryApp:
         self.add_frame.pack(fill="both", expand=True)
 
         self.home_frame.pack_forget()
-        
+    
+    #Display search page
     def show_search_page(self):
         for entry in self.add_entries.values():
             entry.delete(0, tk.END)
@@ -190,6 +202,7 @@ class CDDBQueryApp:
 
         self.home_frame.pack_forget()
     
+    #Function to set user type
     def set_user_type(self, user_type):
         self.user_type = user_type
         self.show_search_page()
