@@ -2,13 +2,37 @@ DROP DATABASE IF EXISTS recordstore;
 CREATE DATABASE recordstore;
 USE recordstore;
 
+CREATE TABLE album (
+disc_ID 	INT NOT NULL AUTO_INCREMENT,
+artist 		VARCHAR(30),
+album_name 	VARCHAR(50),
+release_date DATE,
+genre 		VARCHAR(30),
+PRIMARY KEY(Disc_ID)
+);
+
+-- Insert test values into album table
+INSERT INTO album (artist, album_name, release_date, genre)
+VALUES
+    ('Artist1', 'AlbumName1', '2023-01-01', 'Genre1'),
+    ('Artist2', 'AlbumName2', '2023-02-15', 'Genre2'),
+    ('Artist3', 'AlbumName3', '2023-03-20', 'Genre3'),
+    ('Artist4', 'AlbumName4', '2023-04-05', 'Genre4'),
+    ('Artist5', 'AlbumName5', '2023-05-10', 'Genre5'),
+    ('Artist6', 'AlbumName6', '2023-06-18', 'Genre6'),
+    ('Artist7', 'AlbumName7', '2023-07-22', 'Genre7'),
+    ('Artist8', 'AlbumName8', '2023-08-30', 'Genre8'),
+    ('Artist9', 'AlbumName9', '2023-09-07', 'Genre9'),
+    ('Artist10', 'AlbumName10', '2023-10-12', 'Genre10');
+
+
 CREATE TABLE song(
-song_ID			INT NOT NULL auto_increment PRIMARY KEY,
 song_name 		VARCHAR(30),
 artist_name 	VARCHAR(30),
 album_name 		VARCHAR(50),
 release_date 	DATE,
 rating 			VARCHAR(30)
+
 );
 
 -- Insert values into song table
@@ -115,87 +139,80 @@ VALUES
     ('Wish You Were Here', 'Pink Floyd', 'Wish You Were Here', '1975-09-12', 'Clean'),
     ('The Sound of Silence', 'Simon & Garfunkel', 'Parsley, Sage, Rosemary and Thyme', '1966-01-17', 'Clean');
     
-CREATE TABLE album (
-disc_ID 	INT NOT NULL AUTO_INCREMENT,
-artist 		VARCHAR(30),
-album_name 	VARCHAR(50) NOT NULL UNIQUE,
-release_date DATE,
-genre 		VARCHAR(30),
-PRIMARY KEY(disc_id)
-);
-
--- Insert test values into album table
-INSERT INTO album (artist, album_name, release_date, genre)
-VALUES
-  ('Ed Sheeran', 'Divide', '2017-03-03', 'Pop'),
-  ('Queen', 'A Night at the Opera', '1975-11-21', 'Rock'),
-  ('John Lennon', 'Imagine', '1971-09-09', 'Rock'),
-  ('Eagles', 'Hotel California', '1976-12-08', 'Rock'),
-  ('The Weeknd', 'After Hours', '2020-03-20', 'R&B'),
-  ('The Beatles', 'Help!', '1965-08-06', 'Rock'),
-  ('Michael Jackson', 'Thriller', '1982-11-30', 'Pop'),
-  ('Led Zeppelin', 'Led Zeppelin IV', '1971-11-08', 'Rock'),
-  ('Adele', '21', '2011-01-19', 'Pop'),
-  ('Jimi Hendrix', 'Are You Experienced', '1967-05-12', 'Rock'),
-  ('Guns N\' Roses', 'Appetite for Destruction', '1987-07-21', 'Rock'),
-  ('Nirvana', 'Nevermind', '1991-09-24', 'Grunge'),
-  ('Earth, Wind & Fire', 'I Am', '1979-06-09', 'Funk'),
-  ('The Police', 'Synchronicity', '1983-06-17', 'Rock'),
-  ('John Legend', 'Love in the Future', '2013-08-30', 'R&B'),
-  ('Oasis', '(What\'s the Story) Morning Glory?', '1995-10-02', 'Rock'),
-  ('The Beatles', 'Let It Be', '1970-05-08', 'Rock'),
-  ('Imagine Dragons', 'Night Visions', '2012-09-04', 'Alternative'),
-  ('The Beatles', 'Magical Mystery Tour', '1967-11-27', 'Rock'),
-  ('The White Stripes', 'Elephant', '2003-04-01', 'Rock'),
-  ('ABBA', 'Arrival', '1976-10-11', 'Pop'),
-  ('Pink Floyd', 'Wish You Were Here', '1975-09-12', 'Rock'),
-  ('Simon & Garfunkel', 'Parsley, Sage, Rosemary and Thyme', '1966-10-24', 'Folk');
-  
-    
     CREATE TABLE customer(
 		customer_id INT NOT NULL AUTO_INCREMENT,
         fname 		VARCHAR(20),
         lname		VARCHAR(20),
-		phone_num	CHAR(12), -- format xx-xxx-xxxx for insert
+		phone_num	CHAR(12), -- format xxx-xxx-xxxx for insert
         PRIMARY KEY(customer_id)
     );
     
+    INSERT INTO customer (fname, lname, phone_num)
+	VALUES
+		('John', 'Doe', '123-456-7890'),
+		('Jane', 'Smith', '234-567-8901'),
+		('Alice', 'Johnson', '345-678-9012'),
+		('Bob', 'Brown', '456-789-0123'),
+		('Charlie', 'Davis', '567-890-1234');
+    
     CREATE TABLE sale(
-    sale_id 	INT NOT NULL AUTO_INCREMENT,
-    customer_id INT NOT NULL,
-    sale_date 	DATE,
-    disc_ID		INT,
-    song_ID		INT,
-    PRIMARY KEY(sale_id),
-	FOREIGN KEY(customer_id)
-		REFERENCES customer(customer_id),
-	FOREIGN KEY (disc_ID)
-		REFERENCES album(disc_ID)
+		sale_id 	INT NOT NULL AUTO_INCREMENT,
+		customer_id INT NOT NULL,
+		sale_date 	DATE,
+		PRIMARY KEY(sale_id)
     );
+    
+    INSERT INTO sale (customer_id, sale_date)
+	VALUES
+		(1, '2023-01-10'),
+		(2, '2023-02-15'),
+		(3, '2023-03-20'),
+		(4, '2023-04-25'),
+		(5, '2023-05-30');
     
     CREATE TABLE pre_order(
-    pre_order_id 	INT NOT NULL,
-    sale_id 		INT,
-	customer_id 	INT	NOT NULL,
-    pickup_date 	DATE, 
-    album_id		INT,
-    song_id			INT,
-    FOREIGN KEY(sale_id) 
-		REFERENCES sale(sale_id)
-        ON UPDATE CASCADE,
-	FOREIGN KEY(customer_id)
-		REFERENCES customer(customer_id)
-        ON UPDATE CASCADE,
-	PRIMARY KEY(pre_order_id)
+		pre_order_id 	INT NOT NULL,
+		customer_id 	INT	NOT NULL,
+		pickup_date 	DATE, 
+		album_id		INT,
+		FOREIGN KEY(pre_order_id) 
+			REFERENCES sale(sale_id),
+		FOREIGN KEY(customer_id)
+			REFERENCES customer(customer_id),
+		PRIMARY KEY(pre_order_id)
 	);
     
-    -- employee and manager table not yet in use
+    INSERT INTO pre_order (pre_order_id, customer_id, pickup_date, album_id)
+	VALUES
+		(1, 1, '2023-02-10', 1),
+		(2, 2, '2023-03-15', 2),
+		(3, 3, '2023-04-20', 3),
+		(4, 4, '2023-05-25', 4),
+		(5, 5, '2023-06-30', 5);
+
+    
+    
     CREATE TABLE employee(
-		employee_id 	INT NOT NULL PRIMARY KEY
+		employee_id 	INT NOT NULL PRIMARY KEY,
+        f_name 			VARCHAR(30),
+        l_name			VARCHAR(30)
     );
+    
+	INSERT INTO employee (employee_id, f_name, l_name)
+	VALUES
+		(1001, 'John', 'Doe'),
+		(1002, 'Jane', 'Smith'),
+		(1003, 'Alice', 'Johnson'),
+		(1004, 'Bob', 'Brown'),
+		(1005, 'Charlie', 'Davis');
     
     CREATE TABLE manager(
 		manager_id INT NOT NULL PRIMARY KEY,
         FOREIGN KEY(manager_id) 
 			REFERENCES employee(employee_id)
     );
+    
+    INSERT INTO manager (manager_id)
+	VALUES
+		(1001),
+		(1003);
