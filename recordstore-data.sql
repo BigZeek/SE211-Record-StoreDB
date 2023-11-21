@@ -189,9 +189,12 @@ VALUES
 	PRIMARY KEY(pre_order_id)
 	);
     
-    -- employee and manager table not yet in use
     CREATE TABLE employee(
-		employee_id 	INT NOT NULL PRIMARY KEY
+		employee_id 	INT NOT NULL PRIMARY KEY,
+        f_name 			VARCHAR(50),
+        l_name 			VARCHAR(50),
+        username		VARCHAR(20),
+        emp_password	VARCHAR(20)
     );
     
     CREATE TABLE manager(
